@@ -19,8 +19,6 @@ export function handleNewVideoCreated(event: NewVideoCreatedEvent): void {
 		entity.blockNumber = event.block.number;
 		entity.blockTimestamp = event.block.timestamp;
 		entity.transactionHash = event.transaction.hash;
-
-
 	entity.save();
 }
 
