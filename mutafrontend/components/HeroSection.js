@@ -9,7 +9,7 @@ const HeroSection = () => {
 	return (
 		<div className="container my-16">
 			<div className="flex justify-center flex-col items-center cursor-pointer">
-				<h3 className="text-4xl text-center w-full md:w-8/12">
+				<h3 className="text-4xl text-center w-full">
 					<span className="uppercase font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#b12dd0] to-[#ff61d0]">
 						Mụ̀tà:{" "}
 					</span>
@@ -26,7 +26,7 @@ const HeroSection = () => {
 					Connect and share engaging video contents with your web3 Frens!!!!
 				</p>
 			</div>
-			<div className="mx-auto py-12 px-4 sm:px-6">
+			<div className="py-12 px-4 sm:px-6">
 				<h3 className="text-2xl font-bold text-center w-full">Features</h3>
 			</div>
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 px-6">
