@@ -1,6 +1,7 @@
 /** @format */
 
 import React from "react";
+import Link from "next/link";
 import { AiOutlineShake } from "react-icons/ai";
 import { BsFillCameraVideoFill } from "react-icons/bs";
 import { MdOutlineVideoSettings} from "react-icons/md"
@@ -25,6 +26,11 @@ const HeroSection = () => {
 				<p className="my-4">
 					Connect and share engaging video contents with your web3 Frens!!!!
 				</p>
+				<Link href="/createVideo">
+					<div className="bg-gradient-to-l from-[#b12dd0] to-[#ff61d0] px-4 py-3 rounded-md hover:opacity-80 my-4">
+						<button>Get Started</button>
+					</div>
+				</Link>
 			</div>
 			<div className="py-12 px-4 sm:px-6">
 				<h3 className="text-2xl font-bold text-center w-full">Features</h3>

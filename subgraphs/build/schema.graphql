@@ -1,0 +1,19 @@
+type NewVideoCreated @entity(immutable: true) {
+  id: Bytes!
+  videocontentId: Bytes! # bytes32
+  creatorAddress: Bytes! # address
+  videoTimestamp: BigInt! # uint256
+  videocontentDataCID: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type NewWatchParty @entity(immutable: true) {
+  id: Bytes!
+  videoID: Bytes! # bytes32
+  attendeeAddress: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

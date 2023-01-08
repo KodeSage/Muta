@@ -1,0 +1,117 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "videocontentId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "creatorAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "videoTimestamp",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "videocontentDataCID",
+        "type": "string"
+      }
+    ],
+    "name": "NewVideoCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "videoID",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "attendeeAddress",
+        "type": "address"
+      }
+    ],
+    "name": "NewWatchParty",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "eventId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "JoinWatchParty",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "videoTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "videocontentDataCID",
+        "type": "string"
+      }
+    ],
+    "name": "createVideoNewContent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "identityToVideoContent",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "videocontentId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "videocontentCID",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "videoOwner",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "videoTimestamp",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
