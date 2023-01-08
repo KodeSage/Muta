@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useEffect } from "react";
+import Link from "next/link";
 
 const Navbar = () => {
 	return (
@@ -13,9 +14,11 @@ const Navbar = () => {
 					<div>
 						<p className="hover:text-[#b12dd0]">Explore</p>
 					</div>
-					<div className="bg-gradient-to-l from-[#b12dd0] to-[#ff61d0] px-4 py-3 rounded-md hover:opacity-80">
-						<button>Get Started</button>
-					</div>
+					<Link href="/createVideo">
+						<div className="bg-gradient-to-l from-[#b12dd0] to-[#ff61d0] px-4 py-3 rounded-md hover:opacity-80">
+							<button>Get Started</button>
+						</div>
+					</Link>
 				</div>
 			</nav>
 		</div>

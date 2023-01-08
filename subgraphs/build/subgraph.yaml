@@ -1,8 +1,6 @@
-# @format
-
 specVersion: 0.0.5
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: Muta
@@ -20,10 +18,10 @@ dataSources:
         - NewWatchParty
       abis:
         - name: Muta
-          file: ./abis/Muta.json
+          file: Muta\abis\Muta.json
       eventHandlers:
         - event: NewVideoCreated(bytes32,address,uint256,string)
           handler: handleNewVideoCreated
         - event: NewWatchParty(bytes32,address)
           handler: handleNewWatchParty
-      file: ./src/muta.ts
+      file: Muta\Muta.wasm
