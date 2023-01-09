@@ -7,7 +7,7 @@ const Navbar = () => {
 	return (
 		<div>
 			<nav className="h-16">
-				<div className="container px-8 py-2 flex justify-between items-center cursor-pointer">
+				<div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 md:flex md:items-center md:justify-between cursor-pointer">
 					<h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#b12dd0] to-[#ff61d0] py-2">
 						Mụ̀tà
 					</h3>

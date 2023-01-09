@@ -8,7 +8,7 @@ import { MdOutlineVideoSettings} from "react-icons/md"
 
 const HeroSection = () => {
 	return (
-		<div className="container my-16">
+		<div className="max-w-7xl mx-auto px-4 sm:px-6 my-16">
 			<div className="flex justify-center flex-col items-center cursor-pointer">
 				<h3 className="text-4xl text-center w-full">
 					<span className="uppercase font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#b12dd0] to-[#ff61d0]">
