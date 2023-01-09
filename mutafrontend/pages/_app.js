@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }) {
 					chains={chains}
 					theme={darkTheme({
 						accentColor: "#ff61d0",
-						accentColorForeground: "",
+						accentColorForeground: "#ffffff",
 						borderRadius: "small",
 						fontStack: "system",
 						overlayBlur: "small",
