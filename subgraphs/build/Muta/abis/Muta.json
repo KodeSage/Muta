@@ -10,15 +10,15 @@
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "creatorAddress",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "maxWatchCapacity",
+        "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "videoTimestamp",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "creatorAddress",
+        "type": "address"
       },
       {
         "indexed": false,
@@ -65,14 +65,14 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "videoTimestamp",
-        "type": "uint256"
-      },
-      {
         "internalType": "string",
         "name": "videocontentDataCID",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxWatchCapacity",
+        "type": "uint256"
       }
     ],
     "name": "createVideoNewContent",
@@ -107,7 +107,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "videoTimestamp",
+        "name": "maxWatchCapacity",
         "type": "uint256"
       }
     ],

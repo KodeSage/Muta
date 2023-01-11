@@ -6,7 +6,7 @@ import {
   beforeAll,
   afterAll
 } from "matchstick-as/assembly/index"
-import { Bytes, Address, BigInt } from "@graphprotocol/graph-ts"
+import { Bytes, BigInt, Address } from "@graphprotocol/graph-ts"
 import { NewVideoCreated } from "../generated/schema"
 import { NewVideoCreated as NewVideoCreatedEvent } from "../generated/Muta/Muta"
 import { handleNewVideoCreated } from "../src/muta"
@@ -18,15 +18,15 @@ import { createNewVideoCreatedEvent } from "./muta-utils"
 describe("Describe entity assertions", () => {
   beforeAll(() => {
     let videocontentId = Bytes.fromI32(1234567890)
+    let maxWatchCapacity = BigInt.fromI32(234)
     let creatorAddress = Address.fromString(
       "0x0000000000000000000000000000000000000001"
     )
-    let videoTimestamp = BigInt.fromI32(234)
     let videocontentDataCID = "Example string value"
     let newNewVideoCreatedEvent = createNewVideoCreatedEvent(
       videocontentId,
+      maxWatchCapacity,
       creatorAddress,
-      videoTimestamp,
       videocontentDataCID
     )
     handleNewVideoCreated(newNewVideoCreatedEvent)
@@ -52,14 +52,14 @@ describe("Describe entity assertions", () => {
     assert.fieldEquals(
       "NewVideoCreated",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
-      "creatorAddress",
-      "0x0000000000000000000000000000000000000001"
+      "maxWatchCapacity",
+      "234"
     )
     assert.fieldEquals(
       "NewVideoCreated",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
-      "videoTimestamp",
-      "234"
+      "creatorAddress",
+      "0x0000000000000000000000000000000000000001"
     )
     assert.fieldEquals(
       "NewVideoCreated",

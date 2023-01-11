@@ -2,12 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 
-const Asset = ({ asset, assets, progress }) => {
-	const [videoAsset, setVideoAsset] = useState(asset);
-	const phase = progress?.[0]?.phase;
-	const percent = Math.round(progress?.[0]?.percent * 100);
-	
-    
+const Asset = ({ video, progress }) => {
+	const [videoAsset, setVideoAsset] = useState(video);
+	const phase = progress?.[0].phase;
+	const percent = Math.round(progress?.[0].progress * 100);
+
 	return (
 		<>
 			<div className="bg-white shadow-md  rounded-lg w-[40%] mt-8">

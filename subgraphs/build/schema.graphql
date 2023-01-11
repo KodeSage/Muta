@@ -1,19 +1,25 @@
-type NewVideoCreated @entity(immutable: true) {
-  id: Bytes!
-  videocontentId: Bytes! # bytes32
-  creatorAddress: Bytes! # address
-  videoTimestamp: BigInt! # uint256
-  videocontentDataCID: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+# @format
+
+type VideoEvent @entity {
+	id: ID!
+	videocontentId: Bytes!
+	name: String
+	description: String
+	arweavelink: String
+	videoeventOwner: Bytes!
+	maxWatchCapacity: BigInt!
+	totalJoinedWatchParties: BigInt!
+	joinedWatchParties: [JoinWatchParty!] @derivedFrom(field: "videoevent")
 }
 
-type NewWatchParty @entity(immutable: true) {
-  id: Bytes!
-  videoID: Bytes! # bytes32
-  attendeeAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type Account @entity {
+	id: ID!
+	totalJoinedWatchParties: BigInt!
+	joinedWatchParties: [JoinWatchParty!] @derivedFrom(field: "attendee")
+}
+
+type JoinWatchParty @entity {
+	id: ID!
+	attendee: Account!
+	videoevent: VideoEvent!
 }

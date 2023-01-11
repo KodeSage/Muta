@@ -1,37 +1,72 @@
 /** @format */
-
+import { Address, ipfs, json } from "@graphprotocol/graph-ts";
 import {
 	NewVideoCreated as NewVideoCreatedEvent,
 	NewWatchParty as NewWatchPartyEvent,
 } from "../generated/Muta/Muta";
-import { NewVideoCreated, NewWatchParty } from "../generated/schema";
+import { VideoEvent, Account, JoinWatchParty } from "../generated/schema";
+import { integer } from "@protofire/subgraph-toolkit";
 
 export function handleNewVideoCreated(event: NewVideoCreatedEvent): void {
-	let entity = new NewVideoCreated(
-		event.transaction.hash.concatI32(event.logIndex.toI32())
-	);
-	
-		entity.videocontentId = event.params.videocontentId;
-		entity.creatorAddress = event.params.creatorAddress;
-		entity.videoTimestamp = event.params.videoTimestamp;
-		entity.videocontentDataCID = event.params.videocontentDataCID;
+	let newvideoEvent = VideoEvent.load(event.params.videocontentId.toHex());
+	if (newvideoEvent == null) {
+		newvideoEvent = new VideoEvent(event.params.videocontentId.toHex());
+		newvideoEvent.videocontentId = event.params.videocontentId;
+		newvideoEvent.videoeventOwner = event.params.creatorAddress;
+		newvideoEvent.maxWatchCapacity = event.params.maxWatchCapacity;
+		newvideoEvent.totalJoinedWatchParties = integer.ZERO;
 
-		entity.blockNumber = event.block.number;
-		entity.blockTimestamp = event.block.timestamp;
-		entity.transactionHash = event.transaction.hash;
-	entity.save();
+		let metadata = ipfs.cat(event.params.videocontentDataCID + "/data.json");
+		if (metadata) {
+			const value = json.fromBytes(metadata).toObject();
+			if (value) {
+				const name = value.get("name");
+				const description = value.get("description");
+				const arweavelink = value.get("arweavelink");
+				if (name) {
+					newvideoEvent.name = name.toString();
+				}
+
+				if (description) {
+					newvideoEvent.description = description.toString();
+				}
+
+				if (arweavelink) {
+					newvideoEvent.arweavelink = arweavelink.toString();
+				}
+			}
+			newvideoEvent.save();
+		}
+	}
+}
+
+function fetchOrCreateAccount(address: Address): Account {
+	let account = Account.load(address.toHex());
+	if (account == null) {
+		account = new Account(address.toHex());
+		account.totalJoinedWatchParties = integer.ZERO;
+		account.save();
+	}
+	return account;
 }
 
 export function handleNewWatchParty(event: NewWatchPartyEvent): void {
-	let entity = new NewWatchParty(
-		event.transaction.hash.concatI32(event.logIndex.toI32())
-	);
-	entity.videoID = event.params.videoID;
-	entity.attendeeAddress = event.params.attendeeAddress;
-
-	entity.blockNumber = event.block.number;
-	entity.blockTimestamp = event.block.timestamp;
-	entity.transactionHash = event.transaction.hash;
-
-	entity.save();
+	let id = event.params.videoID.toHex() + event.params.attendeeAddress.toHex();
+	let newJoinwatchparty = JoinWatchParty.load(id);
+	let account = fetchOrCreateAccount(event.params.attendeeAddress);
+	let thisVideoEvent = VideoEvent.load(event.params.videoID.toHex());
+	if (newJoinwatchparty == null && thisVideoEvent != null) {
+		newJoinwatchparty = new JoinWatchParty(id);
+		newJoinwatchparty.attendee = account.id;
+		newJoinwatchparty.videoevent = thisVideoEvent.id;
+		newJoinwatchparty.save();
+		thisVideoEvent.totalJoinedWatchParties = integer.increment(
+			thisVideoEvent.totalJoinedWatchParties
+		);
+		thisVideoEvent.save();
+		account.totalJoinedWatchParties = integer.increment(
+			account.totalJoinedWatchParties
+		);
+		account.save();
+	}
 }

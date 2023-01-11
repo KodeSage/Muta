@@ -27,12 +27,12 @@ export class NewVideoCreated__Params {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get creatorAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
+  get maxWatchCapacity(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
   }
 
-  get videoTimestamp(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+  get creatorAddress(): Address {
+    return this._event.parameters[2].value.toAddress();
   }
 
   get videocontentDataCID(): string {
@@ -96,7 +96,7 @@ export class Muta__identityToVideoContentResult {
     return this.value2;
   }
 
-  getVideoTimestamp(): BigInt {
+  getMaxWatchCapacity(): BigInt {
     return this.value3;
   }
 }
@@ -191,12 +191,12 @@ export class CreateVideoNewContentCall__Inputs {
     this._call = call;
   }
 
-  get videoTimestamp(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
+  get videocontentDataCID(): string {
+    return this._call.inputValues[0].value.toString();
   }
 
-  get videocontentDataCID(): string {
-    return this._call.inputValues[1].value.toString();
+  get maxWatchCapacity(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
   }
 }
 
