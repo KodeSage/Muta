@@ -9,11 +9,11 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
-import {
-	LivepeerConfig,
-	createReactClient,
-	studioProvider,
-} from "@livepeer/react";
+// import {
+// 	LivepeerConfig,
+// 	createReactClient,
+// 	studioProvider,
+// } from "@livepeer/react";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 
@@ -36,26 +36,25 @@ const wagmiClient = createClient({
 	provider,
 });
 
-const client = createReactClient({
-	provider: studioProvider({ apiKey: process.env.NEXT_PUBLIC_LIVEPEER_ID }),
-});
+// const client = createReactClient({
+// 	provider: studioProvider({ apiKey: process.env.NEXT_PUBLIC_LIVEPEER_ID }),
+// });
 
 function MyApp({ Component, pageProps }) {
 	return (
 		<WagmiConfig client={wagmiClient}>
-			<LivepeerConfig client={client}>
-				<RainbowKitProvider
-					chains={chains}
-					theme={darkTheme({
-						accentColor: "#ff61d0",
-						accentColorForeground: "#ffffff",
-						borderRadius: "small",
-						fontStack: "system",
-						overlayBlur: "small",
-					})}>
-					<Component {...pageProps} />
-				</RainbowKitProvider>
-			</LivepeerConfig>
+			<RainbowKitProvider
+				chains={chains}
+				theme={darkTheme({
+					accentColor: "#ff61d0",
+					accentColorForeground: "#ffffff",
+					borderRadius: "small",
+					fontStack: "system",
+					overlayBlur: "small",
+				})}>
+				<Component {...pageProps} />
+			</RainbowKitProvider>
+			{/* <LivepeerConfig client={client}></LivepeerConfig> */}
 		</WagmiConfig>
 	);
 }

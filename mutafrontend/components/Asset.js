@@ -2,10 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 
-const Asset = ({ video, progress }) => {
+const Asset = ({ video }) => {
 	const [videoAsset, setVideoAsset] = useState(video);
-	const phase = progress?.[0].phase;
-	const percent = Math.round(progress?.[0].progress * 100);
 
 	return (
 		<>
@@ -19,10 +17,6 @@ const Asset = ({ video, progress }) => {
 					<div className="flex flex-col justify-center items-start ml-8">
 						<p className="text-lg font-semibold text-gray-700">
 							{videoAsset.name}
-						</p>
-						<p className="mt-4">
-							{Math.round(videoAsset.size / 1000000)} MB - {phase && phase} -{" "}
-							{percent ? percent : 0}%
 						</p>
 					</div>
 				</div>
