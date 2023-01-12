@@ -13,7 +13,7 @@
 - `Languages`: (Solidity, Typescript, Javascript)
 - `Dev Environment`: (Hardhat Toolbox)
 - `Code Editor`: ( VSCode)
-- `Frontend Toolkits` (React, Next.js, ethers.js, Rainbowkit, Arweave, Livepeer and The Graph, bundlr)
+- `Frontend Toolkits` (React, Next.js, ethers.js, Rainbowkit, Arweave, Livepeer and The Graph, bundlr , IPFS/FILECOIN)
 
 
 ### Aim of The DAPP
