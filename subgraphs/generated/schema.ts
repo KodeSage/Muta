@@ -11,37 +11,35 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class NewVideoCreated extends Entity {
-  constructor(id: Bytes) {
+export class VideoEvent extends Entity {
+  constructor(id: string) {
     super();
-    this.set("id", Value.fromBytes(id));
+    this.set("id", Value.fromString(id));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save NewVideoCreated entity without an ID");
+    assert(id != null, "Cannot save VideoEvent entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type NewVideoCreated must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.STRING,
+        `Entities of type VideoEvent must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("NewVideoCreated", id.toBytes().toHexString(), this);
+      store.set("VideoEvent", id.toString(), this);
     }
   }
 
-  static load(id: Bytes): NewVideoCreated | null {
-    return changetype<NewVideoCreated | null>(
-      store.get("NewVideoCreated", id.toHexString())
-    );
+  static load(id: string): VideoEvent | null {
+    return changetype<VideoEvent | null>(store.get("VideoEvent", id));
   }
 
-  get id(): Bytes {
+  get id(): string {
     let value = this.get("id");
-    return value!.toBytes();
+    return value!.toString();
   }
 
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 
   get videocontentId(): Bytes {
@@ -53,136 +51,239 @@ export class NewVideoCreated extends Entity {
     this.set("videocontentId", Value.fromBytes(value));
   }
 
-  get creatorAddress(): Bytes {
-    let value = this.get("creatorAddress");
+  get ipfsURI(): string | null {
+    let value = this.get("ipfsURI");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set ipfsURI(value: string | null) {
+    if (!value) {
+      this.unset("ipfsURI");
+    } else {
+      this.set("ipfsURI", Value.fromString(<string>value));
+    }
+  }
+
+  get videoeventOwner(): Bytes {
+    let value = this.get("videoeventOwner");
     return value!.toBytes();
   }
 
-  set creatorAddress(value: Bytes) {
-    this.set("creatorAddress", Value.fromBytes(value));
+  set videoeventOwner(value: Bytes) {
+    this.set("videoeventOwner", Value.fromBytes(value));
   }
 
-  get videoTimestamp(): BigInt {
-    let value = this.get("videoTimestamp");
+  get maxWatchCapacity(): BigInt {
+    let value = this.get("maxWatchCapacity");
     return value!.toBigInt();
   }
 
-  set videoTimestamp(value: BigInt) {
-    this.set("videoTimestamp", Value.fromBigInt(value));
+  set maxWatchCapacity(value: BigInt) {
+    this.set("maxWatchCapacity", Value.fromBigInt(value));
   }
 
-  get videocontentDataCID(): string {
-    let value = this.get("videocontentDataCID");
-    return value!.toString();
-  }
-
-  set videocontentDataCID(value: string) {
-    this.set("videocontentDataCID", Value.fromString(value));
-  }
-
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
+  get totalJoinedWatchParties(): BigInt {
+    let value = this.get("totalJoinedWatchParties");
     return value!.toBigInt();
   }
 
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
+  set totalJoinedWatchParties(value: BigInt) {
+    this.set("totalJoinedWatchParties", Value.fromBigInt(value));
   }
 
-  get blockTimestamp(): BigInt {
-    let value = this.get("blockTimestamp");
-    return value!.toBigInt();
+  get joinedWatchParties(): Array<string> | null {
+    let value = this.get("joinedWatchParties");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set blockTimestamp(value: BigInt) {
-    this.set("blockTimestamp", Value.fromBigInt(value));
-  }
-
-  get transactionHash(): Bytes {
-    let value = this.get("transactionHash");
-    return value!.toBytes();
-  }
-
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
+  set joinedWatchParties(value: Array<string> | null) {
+    if (!value) {
+      this.unset("joinedWatchParties");
+    } else {
+      this.set(
+        "joinedWatchParties",
+        Value.fromStringArray(<Array<string>>value)
+      );
+    }
   }
 }
 
-export class NewWatchParty extends Entity {
-  constructor(id: Bytes) {
+export class VideoEventMetadata extends Entity {
+  constructor(id: string) {
     super();
-    this.set("id", Value.fromBytes(id));
+    this.set("id", Value.fromString(id));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save NewWatchParty entity without an ID");
+    assert(id != null, "Cannot save VideoEventMetadata entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type NewWatchParty must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.STRING,
+        `Entities of type VideoEventMetadata must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("NewWatchParty", id.toBytes().toHexString(), this);
+      store.set("VideoEventMetadata", id.toString(), this);
     }
   }
 
-  static load(id: Bytes): NewWatchParty | null {
-    return changetype<NewWatchParty | null>(
-      store.get("NewWatchParty", id.toHexString())
+  static load(id: string): VideoEventMetadata | null {
+    return changetype<VideoEventMetadata | null>(
+      store.get("VideoEventMetadata", id)
     );
   }
 
-  get id(): Bytes {
+  get id(): string {
     let value = this.get("id");
-    return value!.toBytes();
+    return value!.toString();
   }
 
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 
-  get videoID(): Bytes {
-    let value = this.get("videoID");
-    return value!.toBytes();
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
   }
 
-  set videoID(value: Bytes) {
-    this.set("videoID", Value.fromBytes(value));
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
   }
 
-  get attendeeAddress(): Bytes {
-    let value = this.get("attendeeAddress");
-    return value!.toBytes();
+  get description(): string {
+    let value = this.get("description");
+    return value!.toString();
   }
 
-  set attendeeAddress(value: Bytes) {
-    this.set("attendeeAddress", Value.fromBytes(value));
+  set description(value: string) {
+    this.set("description", Value.fromString(value));
   }
 
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
+  get arweavelink(): string {
+    let value = this.get("arweavelink");
+    return value!.toString();
+  }
+
+  set arweavelink(value: string) {
+    this.set("arweavelink", Value.fromString(value));
+  }
+}
+
+export class Account extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Account entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Account must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Account", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Account | null {
+    return changetype<Account | null>(store.get("Account", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get totalJoinedWatchParties(): BigInt {
+    let value = this.get("totalJoinedWatchParties");
     return value!.toBigInt();
   }
 
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
+  set totalJoinedWatchParties(value: BigInt) {
+    this.set("totalJoinedWatchParties", Value.fromBigInt(value));
   }
 
-  get blockTimestamp(): BigInt {
-    let value = this.get("blockTimestamp");
-    return value!.toBigInt();
+  get joinedWatchParties(): Array<string> | null {
+    let value = this.get("joinedWatchParties");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set blockTimestamp(value: BigInt) {
-    this.set("blockTimestamp", Value.fromBigInt(value));
+  set joinedWatchParties(value: Array<string> | null) {
+    if (!value) {
+      this.unset("joinedWatchParties");
+    } else {
+      this.set(
+        "joinedWatchParties",
+        Value.fromStringArray(<Array<string>>value)
+      );
+    }
+  }
+}
+
+export class JoinWatchParty extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
   }
 
-  get transactionHash(): Bytes {
-    let value = this.get("transactionHash");
-    return value!.toBytes();
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save JoinWatchParty entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type JoinWatchParty must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("JoinWatchParty", id.toString(), this);
+    }
   }
 
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
+  static load(id: string): JoinWatchParty | null {
+    return changetype<JoinWatchParty | null>(store.get("JoinWatchParty", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get attendee(): string {
+    let value = this.get("attendee");
+    return value!.toString();
+  }
+
+  set attendee(value: string) {
+    this.set("attendee", Value.fromString(value));
+  }
+
+  get videoevent(): string {
+    let value = this.get("videoevent");
+    return value!.toString();
+  }
+
+  set videoevent(value: string) {
+    this.set("videoevent", Value.fromString(value));
   }
 }

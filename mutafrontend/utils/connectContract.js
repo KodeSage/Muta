@@ -3,9 +3,9 @@ import { ethers } from "ethers";
 
 function connectContract() {
   //Note: Your contractAddress will start with 0x, delete everything between the quotes and paste your contract address.
-  const contractAddress = "0x4BDc94De936E0A51c7E367bcE1d9EA5cDed6a249";
+  const contractAddress = "0x27c1454b8091317739E0aE4629098F76F52d4015";
   const contractABI = abiJSON.abi;
-  let rsvpContract;
+  let mutaContract;
   try {
     const { ethereum } = window;
 

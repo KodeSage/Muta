@@ -1,11 +1,11 @@
 import { newMockEvent } from "matchstick-as"
-import { ethereum, Bytes, Address, BigInt } from "@graphprotocol/graph-ts"
+import { ethereum, Bytes, BigInt, Address } from "@graphprotocol/graph-ts"
 import { NewVideoCreated, NewWatchParty } from "../generated/Muta/Muta"
 
 export function createNewVideoCreatedEvent(
   videocontentId: Bytes,
+  maxWatchCapacity: BigInt,
   creatorAddress: Address,
-  videoTimestamp: BigInt,
   videocontentDataCID: string
 ): NewVideoCreated {
   let newVideoCreatedEvent = changetype<NewVideoCreated>(newMockEvent())
@@ -20,14 +20,14 @@ export function createNewVideoCreatedEvent(
   )
   newVideoCreatedEvent.parameters.push(
     new ethereum.EventParam(
-      "creatorAddress",
-      ethereum.Value.fromAddress(creatorAddress)
+      "maxWatchCapacity",
+      ethereum.Value.fromUnsignedBigInt(maxWatchCapacity)
     )
   )
   newVideoCreatedEvent.parameters.push(
     new ethereum.EventParam(
-      "videoTimestamp",
-      ethereum.Value.fromUnsignedBigInt(videoTimestamp)
+      "creatorAddress",
+      ethereum.Value.fromAddress(creatorAddress)
     )
   )
   newVideoCreatedEvent.parameters.push(
