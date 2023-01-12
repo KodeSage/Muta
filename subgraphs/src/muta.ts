@@ -69,14 +69,12 @@ export function handleMetadata(content: Bytes): void {
 	let videoMetadata = new VideoEventMetadata(dataSource.stringParam());
 	const value = json.fromBytes(content).toObject();
 	if (value) {
-		const image = value.get("image");
 		const name = value.get("name");
 		const description = value.get("description");
 		const arweavelink = value.get("arweavelink");
 
-		if (name && image && description && arweavelink) {
+		if (name && description && arweavelink) {
 			videoMetadata.name = name.toString();
-			videoMetadata.image = image.toString();
 			videoMetadata.arweavelink = arweavelink.toString();
 			videoMetadata.description = description.toString();
 		}

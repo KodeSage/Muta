@@ -12,7 +12,6 @@ type VideoEvent @entity {
 type VideoEventMetadata @entity {
 	id: ID!
 	name: String!
-	image: String!
 	description: String!
 	arweavelink: String!
 }

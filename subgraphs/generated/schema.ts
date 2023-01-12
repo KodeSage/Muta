@@ -158,15 +158,6 @@ export class VideoEventMetadata extends Entity {
     this.set("name", Value.fromString(value));
   }
 
-  get image(): string {
-    let value = this.get("image");
-    return value!.toString();
-  }
-
-  set image(value: string) {
-    this.set("image", Value.fromString(value));
-  }
-
   get description(): string {
     let value = this.get("description");
     return value!.toString();

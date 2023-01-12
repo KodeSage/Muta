@@ -3,6 +3,7 @@ import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import Head from "next/head";
 import Asset from "../components/Asset";
+import { Link } from "next/link";
 import connectContract from "../utils/connectContract";
 import ParticlesBackground from "../config/ParticlesBackground";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -16,11 +17,10 @@ import { Web3Storage, File, Blob } from "web3.storage";
 
 export default function createVideo() {
 	const rainbowKitProvider = useProvider();
-	 const { chain, chains } = useNetwork();
+	const { chain, chains } = useNetwork();
 	const { data: rainbowKitSigner, isError, isLoading } = useSigner();
 	const [WatchCapacity, setWatchCapacity] = useState("");
 	const fundAmount = 0.1;
-	const [BUN, setBUN] = useState(null);
 	const [video, setVideo] = useState(null);
 	const [videoType, setVideoType] = useState(null);
 	const [videoName, setvideoName] = useState("");
@@ -88,7 +88,7 @@ export default function createVideo() {
 		});
 		const files = [new File([blob], "data.json")];
 		const cid = await client.put(files);
-		console.log( "stored files with cid:", cid );
+		console.log("stored files with cid:", cid);
 		setMessage("Done Uploading to IPFS/FILECOIN");
 		return cid;
 	};
@@ -109,8 +109,7 @@ export default function createVideo() {
 					};
 					const cid = await UploadFilestoWeb3Storage(body);
 
-					if ( cid )
-					{
+					if (cid) {
 						setMessage("Preparing to Upload to Ploygon Blockchain");
 						await UploadToBlockchain(cid);
 					}
@@ -265,15 +264,17 @@ export default function createVideo() {
 							</section>
 						)}
 					</div>
-					{success && videoEventID && (
-						<div>
-							Success! Please wait a few minutes, then check out your videoevent
-							page
-							<span className="font-bold">
-								<Link href={`/event/${videoEventID}`}>here</Link>
-							</span>
-						</div>
-					)}
+					{/* <div>
+						{success && (
+							<div>
+								Success! Please wait a few minutes, then check out your
+								videoevent page
+								<span className="font-bold">
+									<Link href={`/explorer`}>here</Link>
+								</span>
+							</div>
+						)}
+					</div> */}
 				</div>
 			</div>
 			{loading && <Loader loading={loading} message={message} />}
