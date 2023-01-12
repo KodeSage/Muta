@@ -24,3 +24,7 @@
 - Used `Check-Effect Interaction and Pull-Payment` Design Pattern in Writing the SmartContract Code
 - For Efficient Gas Optimization `external` modifer was used in different function calls
 - eventsID are stored in `Bytes32` Datatype instead of `uint`.
+
+
+## Subgraph Query Http
+https://api.thegraph.com/subgraphs/name/kodesage/muta_v2
