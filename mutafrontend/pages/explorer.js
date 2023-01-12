@@ -1,4 +1,5 @@
 import React from 'react'
+import Head from "next/head";
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import ParticlesBackground from "../config/ParticlesBackground";
 
