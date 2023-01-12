@@ -12,21 +12,23 @@ import { useProvider, useSigner } from "wagmi";
 import fileReaderStream from "filereader-stream";
 import BigNumber from "bignumber.js";
 import { WebBundlr } from "@bundlr-network/client";
+import { Web3Storage, File, Blob } from "web3.storage";
 
 export default function createVideo() {
 	const rainbowKitProvider = useProvider();
+	 const { chain, chains } = useNetwork();
 	const { data: rainbowKitSigner, isError, isLoading } = useSigner();
-	const [maxWatchCapacity, setWatchCapacity] = useState("");
+	const [WatchCapacity, setWatchCapacity] = useState("");
 	const fundAmount = 0.1;
 	const [BUN, setBUN] = useState(null);
 	const [video, setVideo] = useState(null);
 	const [videoType, setVideoType] = useState(null);
 	const [videoName, setvideoName] = useState("");
 	const [videoDescription, setvideoDescription] = useState("");
-	const [arweaveCID, setaArweaveCID] = useState(null);
-	const [ipfsCID, setaipfsCID] = useState(null);
 	const [loading, setLoading] = useState(null);
 	const [message, setMessage] = useState();
+	const [videoEventID, setVideoEventID] = useState(null);
+	const [success, setSuccess] = useState(null);
 	const { address } = useAccount();
 
 	const onDrop = useCallback(async (acceptedFiles) => {
@@ -50,7 +52,7 @@ export default function createVideo() {
 			setMessage("Please connect your wallet first.");
 			return;
 		}
-		setMessage("Preparing to Upload to Arweaveasa");
+		setMessage("Preparing to Upload to Arweavea");
 		rainbowKitProvider.getSigner = () => rainbowKitSigner;
 		const bundlr = new WebBundlr(
 			"https://devnet.bundlr.network",
@@ -61,19 +63,36 @@ export default function createVideo() {
 			}
 		);
 		await bundlr.ready();
-		await bundlr.ready();
 		//Fund Bund Wallet
 		const fundAmountParsed = new BigNumber(fundAmount).multipliedBy(
 			bundlr.currencyConfig.base[1]
 		);
 		await bundlr.fund(fundAmountParsed.toString());
-		console.log("Wallet Funded");
+		setMessage("Wallet Funded");
 		const tx = await bundlr.upload(dataStream, {
 			tags: [{ name: "Content-Type", value: videoType }],
 		});
 
 		return tx.id;
 	};
+	function getAccessToken() {
+		return process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN;
+	}
+	function makeStorageClient() {
+		return new Web3Storage({ token: getAccessToken() });
+	}
+	const UploadFilestoWeb3Storage = async (body) => {
+		const client = makeStorageClient();
+		const blob = new Blob([JSON.stringify(body)], {
+			type: "application/json",
+		});
+		const files = [new File([blob], "data.json")];
+		const cid = await client.put(files);
+		console.log( "stored files with cid:", cid );
+		setMessage("Done Uploading to IPFS/FILECOIN");
+		return cid;
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (video !== null) {
@@ -81,7 +100,20 @@ export default function createVideo() {
 			try {
 				const arweaveid = await UploadAreweave(video, videoType);
 				if (arweaveid) {
-					console.log(`File uploaded ==> https://arweave.net/${arweaveid}`);
+					setMessage("Preparing to Upload to IPFS/FILECOIN");
+					const link = `ar://${arweaveid}`;
+					const body = {
+						name: videoName,
+						description: videoDescription,
+						arweavelink: link,
+					};
+					const cid = await UploadFilestoWeb3Storage(body);
+
+					if ( cid )
+					{
+						setMessage("Preparing to Upload to Ploygon Blockchain");
+						await UploadToBlockchain(cid);
+					}
 				}
 			} catch (error) {
 				console.log(
@@ -90,65 +122,38 @@ export default function createVideo() {
 			}
 		}
 	};
-	// const UploadToArweave = async (assertId) => {
-	// 	if (message === "Wallet Funded") {
-	// 		try {
-	// 			const body = {
-	// 				asset: assertId,
-	// 				title: videoName,
-	// 				description: videoDescription,
-	// 			};
-	// 			let response = await bundlr.upload(body);
-	// 			setaArweaveCID(`ar://${response.id}`);
-	// 			setMessage(`Data uploaded ==> ar://${response.id}`);
-	// 			if (arweaveCID) {
-	// 				setMessage("Uploading to Blockchain");
-	// 				await UploadToBlockchain(arweaveCID);
-	// 			}
-	// 		} catch (e) {
-	// 			console.log(e);
-	// 			setMessage("Error While Uploading to Arweave ", e.message);
-	// 		}
-	// 	}
-	// };
-	// const UploadToBlockchain = async (arweaveCID) => {
-	// 	try {
-	// 		const mutaContract = connectContract();
 
-	// 		if (mutaContract) {
-	// 			let DateAndTime = new Date();
-	// 			let videoTimestamp = DateAndTime.getTime();
-	// 			let videocontentDataCID = arweaveCID;
-	// 			const txn = await mutaContract.createVideoNewContent(
-	// 				videoTimestamp,
-	// 				videocontentDataCID,
-	// 				{ gasLimit: 900000 }
-	// 			);
-	// 			console.log("Minting...", txn.hash);
-	// 			let wait = await txn.wait();
-	// 			console.log("Minted -- ", txn.hash);
-	// 			setMessage("Your Video has been created successfully.");
-	// 			setLoading(false);
-	// 		} else {
-	// 			console.log("Error getting contract.");
-	// 		}
-	// 	} catch (e) {}
-	// };
-	// const preparingToUpload = async () => {
-	// 	rainbowKitProvider.getSigner = () => rainbowKitSigner;
-	// 	const bundlr = new WebBundlr(
-	// 		"https://devnet.bundlr.network",
-	// 		"matic",
-	// 		rainbowKitProvider,
-	// 		{
-	// 			providerUrl: "https://matic-mumbai.chainstacklabs.com",
-	// 		}
-	// 	);
-	// 	await bundlr.ready();
+	const UploadToBlockchain = async (cid) => {
+		try {
+			const mutaContract = connectContract();
 
-	// };
-
-	// useEffect(() => {}, [message]);
+			if (mutaContract) {
+				let videocontentDataCID = cid;
+				let maxWatchCapacity = WatchCapacity;
+				const txn = await mutaContract.createVideoNewContent(
+					videocontentDataCID,
+					maxWatchCapacity,
+					{ gasLimit: 900000 }
+				);
+				console.log("Minting...", txn.hash);
+				let wait = await txn.wait();
+				console.log("Minted -- ", txn.hash);
+				setVideoEventID(wait.events[0].args[0]);
+				setSuccess(true);
+				setMessage("Your Video has been created successfully.");
+				setLoading(false);
+			} else {
+				console.log("Error getting contract.");
+			}
+		} catch (e) {
+			setSuccess(false);
+			setMessage(
+				`There was an error creating your videoevent: ${error.message}`
+			);
+			setLoading(false);
+			console.log(error);
+		}
+	};
 
 	return (
 		<>
@@ -177,7 +182,7 @@ export default function createVideo() {
 						</nav>
 					</div>
 					<div>
-						{address && (
+						{address && !success && chain.name === "Polygon Mumbai" && (
 							<form
 								className="space-y-8 divide-y divide-gray-200 my-16 max-w-7xl mx-auto py-4 px-4 sm:px-6"
 								onSubmit={handleSubmit}>
@@ -200,7 +205,7 @@ export default function createVideo() {
 											</div>
 										)}
 									</div>
-									{/* <div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
+									<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
 										<input
 											id="event-name"
 											name="event-name"
@@ -211,8 +216,9 @@ export default function createVideo() {
 											onChange={(e) => setvideoName(e.target.value)}
 											required
 										/>
-									</div> */}
-									{/* <div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
+									</div>
+									{/* {process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN} */}
+									<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
 										<input
 											id="event-name"
 											name="event-name"
@@ -223,8 +229,8 @@ export default function createVideo() {
 											onChange={(e) => setvideoDescription(e.target.value)}
 											required
 										/>
-									</div> */}
-									{/* <div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
+									</div>
+									<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
 										<input
 											type="number"
 											name="max-capacity"
@@ -232,11 +238,11 @@ export default function createVideo() {
 											min="1"
 											placeholder="Max Watch Capacity (e.g. 100)"
 											className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border py-6 px-4 my-2 rounded-md"
-											value={maxWatchCapacity}
+											value={WatchCapacity}
 											onChange={(e) => setWatchCapacity(e.target.value)}
 											required
 										/>
-									</div> */}
+									</div>
 									<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
 										<button
 											type="submit"
@@ -248,7 +254,6 @@ export default function createVideo() {
 							</form>
 						)}
 					</div>
-
 					<div>
 						{!address && (
 							<section className="sm:pt-5 sm:flex sm:justify-center sm:items-center sm:flex-col py-8">
@@ -260,6 +265,15 @@ export default function createVideo() {
 							</section>
 						)}
 					</div>
+					{success && videoEventID && (
+						<div>
+							Success! Please wait a few minutes, then check out your videoevent
+							page
+							<span className="font-bold">
+								<Link href={`/event/${videoEventID}`}>here</Link>
+							</span>
+						</div>
+					)}
 				</div>
 			</div>
 			{loading && <Loader loading={loading} message={message} />}

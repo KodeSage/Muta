@@ -3,15 +3,19 @@
 type VideoEvent @entity {
 	id: ID!
 	videocontentId: Bytes!
-	name: String
-	description: String
-	arweavelink: String
+	ipfsURI: VideoEventMetadata
 	videoeventOwner: Bytes!
 	maxWatchCapacity: BigInt!
 	totalJoinedWatchParties: BigInt!
 	joinedWatchParties: [JoinWatchParty!] @derivedFrom(field: "videoevent")
 }
-
+type VideoEventMetadata @entity {
+	id: ID!
+	name: String!
+	image: String!
+	description: String!
+	arweavelink: String!
+}
 type Account @entity {
 	id: ID!
 	totalJoinedWatchParties: BigInt!

@@ -51,8 +51,8 @@ export class VideoEvent extends Entity {
     this.set("videocontentId", Value.fromBytes(value));
   }
 
-  get name(): string | null {
-    let value = this.get("name");
+  get ipfsURI(): string | null {
+    let value = this.get("ipfsURI");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -60,45 +60,11 @@ export class VideoEvent extends Entity {
     }
   }
 
-  set name(value: string | null) {
+  set ipfsURI(value: string | null) {
     if (!value) {
-      this.unset("name");
+      this.unset("ipfsURI");
     } else {
-      this.set("name", Value.fromString(<string>value));
-    }
-  }
-
-  get description(): string | null {
-    let value = this.get("description");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set description(value: string | null) {
-    if (!value) {
-      this.unset("description");
-    } else {
-      this.set("description", Value.fromString(<string>value));
-    }
-  }
-
-  get arweavelink(): string | null {
-    let value = this.get("arweavelink");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set arweavelink(value: string | null) {
-    if (!value) {
-      this.unset("arweavelink");
-    } else {
-      this.set("arweavelink", Value.fromString(<string>value));
+      this.set("ipfsURI", Value.fromString(<string>value));
     }
   }
 
@@ -147,6 +113,76 @@ export class VideoEvent extends Entity {
         Value.fromStringArray(<Array<string>>value)
       );
     }
+  }
+}
+
+export class VideoEventMetadata extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save VideoEventMetadata entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type VideoEventMetadata must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("VideoEventMetadata", id.toString(), this);
+    }
+  }
+
+  static load(id: string): VideoEventMetadata | null {
+    return changetype<VideoEventMetadata | null>(
+      store.get("VideoEventMetadata", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get image(): string {
+    let value = this.get("image");
+    return value!.toString();
+  }
+
+  set image(value: string) {
+    this.set("image", Value.fromString(value));
+  }
+
+  get description(): string {
+    let value = this.get("description");
+    return value!.toString();
+  }
+
+  set description(value: string) {
+    this.set("description", Value.fromString(value));
+  }
+
+  get arweavelink(): string {
+    let value = this.get("arweavelink");
+    return value!.toString();
+  }
+
+  set arweavelink(value: string) {
+    this.set("arweavelink", Value.fromString(value));
   }
 }
 

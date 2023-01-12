@@ -1,11 +1,23 @@
 /** @format */
-import { Address, ipfs, json } from "@graphprotocol/graph-ts";
+import {
+	Address,
+	ipfs,
+	json,
+	Bytes,
+	dataSource,
+} from "@graphprotocol/graph-ts";
 import {
 	NewVideoCreated as NewVideoCreatedEvent,
 	NewWatchParty as NewWatchPartyEvent,
 } from "../generated/Muta/Muta";
-import { VideoEvent, Account, JoinWatchParty } from "../generated/schema";
+import {
+	VideoEvent,
+	Account,
+	JoinWatchParty,
+	VideoEventMetadata,
+} from "../generated/schema";
 import { integer } from "@protofire/subgraph-toolkit";
+import { VideoEventMetadata as VideoEventMetadataTemplate } from "../generated/templates";
 
 export function handleNewVideoCreated(event: NewVideoCreatedEvent): void {
 	let newvideoEvent = VideoEvent.load(event.params.videocontentId.toHex());
@@ -15,28 +27,10 @@ export function handleNewVideoCreated(event: NewVideoCreatedEvent): void {
 		newvideoEvent.videoeventOwner = event.params.creatorAddress;
 		newvideoEvent.maxWatchCapacity = event.params.maxWatchCapacity;
 		newvideoEvent.totalJoinedWatchParties = integer.ZERO;
-
-		let metadata = ipfs.cat(event.params.videocontentDataCID + "/data.json");
-		if (metadata) {
-			const value = json.fromBytes(metadata).toObject();
-			if (value) {
-				const name = value.get("name");
-				const description = value.get("description");
-				const arweavelink = value.get("arweavelink");
-				if (name) {
-					newvideoEvent.name = name.toString();
-				}
-
-				if (description) {
-					newvideoEvent.description = description.toString();
-				}
-
-				if (arweavelink) {
-					newvideoEvent.arweavelink = arweavelink.toString();
-				}
-			}
-			newvideoEvent.save();
-		}
+		const videoIpfsHash = event.params.videocontentDataCID + "/data.json";
+		newvideoEvent.ipfsURI = videoIpfsHash;
+		VideoEventMetadataTemplate.create(videoIpfsHash);
+		newvideoEvent.save();
 	}
 }
 
@@ -68,5 +62,25 @@ export function handleNewWatchParty(event: NewWatchPartyEvent): void {
 			account.totalJoinedWatchParties
 		);
 		account.save();
+	}
+}
+
+export function handleMetadata(content: Bytes): void {
+	let videoMetadata = new VideoEventMetadata(dataSource.stringParam());
+	const value = json.fromBytes(content).toObject();
+	if (value) {
+		const image = value.get("image");
+		const name = value.get("name");
+		const description = value.get("description");
+		const arweavelink = value.get("arweavelink");
+
+		if (name && image && description && arweavelink) {
+			videoMetadata.name = name.toString();
+			videoMetadata.image = image.toString();
+			videoMetadata.arweavelink = arweavelink.toString();
+			videoMetadata.description = description.toString();
+		}
+
+		videoMetadata.save();
 	}
 }
