@@ -28,3 +28,7 @@
 
 ## Subgraph Query Http
 https://api.thegraph.com/subgraphs/name/kodesage/muta_v2
+
+##Subgraph Playground 
+
+https://thegraph.com/hosted-service/subgraph/kodesage/muta_v2
