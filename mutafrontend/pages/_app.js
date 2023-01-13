@@ -2,6 +2,8 @@
 
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
+import { ApolloProvider } from "@apollo/client";
+import client from "../apollo-client";
 import {
 	getDefaultWallets,
 	RainbowKitProvider,
@@ -36,7 +38,7 @@ const wagmiClient = createClient({
 	provider,
 });
 
-// const client = createReactClient({
+// const lfclient = createReactClient({
 // 	provider: studioProvider({ apiKey: process.env.NEXT_PUBLIC_LIVEPEER_ID }),
 // });
 
@@ -52,7 +54,9 @@ function MyApp({ Component, pageProps }) {
 					fontStack: "system",
 					overlayBlur: "small",
 				})}>
-				<Component {...pageProps} />
+				<ApolloProvider client={client}>
+					<Component {...pageProps} />
+				</ApolloProvider>
 			</RainbowKitProvider>
 			{/* <LivepeerConfig client={client}></LivepeerConfig> */}
 		</WagmiConfig>

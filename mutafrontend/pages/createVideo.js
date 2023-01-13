@@ -180,101 +180,96 @@ export default function createVideo() {
 							</div>
 						</nav>
 					</div>
-					<div>
-						{address && !success && chain.name === "Polygon Mumbai" && (
-							<form
-								className="space-y-8 divide-y divide-gray-200 my-16 max-w-7xl mx-auto py-4 px-4 sm:px-6"
-								onSubmit={handleSubmit}>
-								<div className="space-y-6 sm:space-y-5 border-white border-2 rounded-lg px-4 py-4 h-screen">
-									<div>
-										{video ? (
-											<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center cursor-pointer">
-												<Asset video={video} />
+
+					{address && !success && chain.name === "Polygon Mumbai" && (
+						<form
+							className="space-y-8 divide-y divide-gray-200 my-16 max-w-7xl mx-auto py-4 px-4 sm:px-6"
+							onSubmit={handleSubmit}>
+							<div className="space-y-6 sm:space-y-5 border-white border-2 rounded-lg px-4 py-4 h-screen">
+								<div>
+									{video ? (
+										<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center cursor-pointer">
+											<Asset video={video} />
+										</div>
+									) : (
+										<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center cursor-pointer">
+											<div
+												{...getRootProps({ className: "dropzone" })}
+												className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border py-6 my-6 rounded-md h-24">
+												<input {...getInputProps()} />
+												<p className="text-center">
+													Drag and drop a video file
+												</p>
 											</div>
-										) : (
-											<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center cursor-pointer">
-												<div
-													{...getRootProps({ className: "dropzone" })}
-													className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border py-6 my-6 rounded-md h-24">
-													<input {...getInputProps()} />
-													<p className="text-center">
-														Drag and drop a video file
-													</p>
-												</div>
-											</div>
-										)}
-									</div>
-									<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
-										<input
-											id="event-name"
-											name="event-name"
-											type="text"
-											placeholder="Title of The Video"
-											className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 px-4 focus:border-indigo-500 sm:text-sm border py-4 my-2 rounded-md"
-											value={videoName}
-											onChange={(e) => setvideoName(e.target.value)}
-											required
-										/>
-									</div>
-									{/* {process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN} */}
-									<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
-										<input
-											id="event-name"
-											name="event-name"
-											type="text"
-											placeholder="Description of The Video"
-											className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 px-4 focus:border-indigo-500 sm:text-sm border py-6 my-2 rounded-md"
-											value={videoDescription}
-											onChange={(e) => setvideoDescription(e.target.value)}
-											required
-										/>
-									</div>
-									<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
-										<input
-											type="number"
-											name="max-capacity"
-											id="max-capacity"
-											min="1"
-											placeholder="Max Watch Capacity (e.g. 100)"
-											className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border py-6 px-4 my-2 rounded-md"
-											value={WatchCapacity}
-											onChange={(e) => setWatchCapacity(e.target.value)}
-											required
-										/>
-									</div>
-									<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
-										<button
-											type="submit"
-											className="ml-3 inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-[#ff61d0] hover:bg-[#ff61d0] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-											Publish
-										</button>
-									</div>
+										</div>
+									)}
 								</div>
-							</form>
-						)}
-					</div>
-					<div>
-						{!address && (
-							<section className="sm:pt-5 sm:flex sm:justify-center sm:items-center sm:flex-col py-8">
-								<p className="mb-4">
-									Please connect your wallet to create video content on the
-									Blockchain.
-								</p>
-								<ConnectButton />
-							</section>
-						)}
-					</div>
-					{/* <div>
-						{success && (
-							<div>
-								Success! Please wait a few minutes, then check out your
-								videoevent page
-								<span className="font-bold">
-									<Link href={`/explorer`}>here</Link>
-								</span>
+								<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
+									<input
+										id="event-name"
+										name="event-name"
+										type="text"
+										placeholder="Title of The Video"
+										className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 px-4 focus:border-indigo-500 sm:text-sm border py-4 my-2 rounded-md"
+										value={videoName}
+										onChange={(e) => setvideoName(e.target.value)}
+										required
+									/>
+								</div>
+								{/* {process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN} */}
+								<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
+									<input
+										id="event-name"
+										name="event-name"
+										type="text"
+										placeholder="Description of The Video"
+										className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 px-4 focus:border-indigo-500 sm:text-sm border py-6 my-2 rounded-md"
+										value={videoDescription}
+										onChange={(e) => setvideoDescription(e.target.value)}
+										required
+									/>
+								</div>
+								<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
+									<input
+										type="number"
+										name="max-capacity"
+										id="max-capacity"
+										min="1"
+										placeholder="Max Watch Capacity (e.g. 100)"
+										className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border py-6 px-4 my-2 rounded-md"
+										value={WatchCapacity}
+										onChange={(e) => setWatchCapacity(e.target.value)}
+										required
+									/>
+								</div>
+								<div className="sm:pt-2 sm:flex sm:justify-center sm:items-center">
+									<button
+										type="submit"
+										className="ml-3 inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-[#ff61d0] hover:bg-[#ff61d0] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+										Publish
+									</button>
+								</div>
 							</div>
-						)}
-					</div> */}
+						</form>
+					)}
+					{!address && (
+						<section className="sm:pt-5 sm:flex sm:justify-center sm:items-center sm:flex-col py-8">
+							<p className="mb-4">
+								Please connect your wallet to create video content on the
+								Blockchain.
+							</p>
+							<ConnectButton />
+						</section>
+					)}
+					{address && success && videoEventID && (
+						<div>
+							Success! Please wait a few minutes, then check out your videoevent
+							page
+							<span className="font-bold">
+								<Link href={`/explorer`}>here</Link>
+							</span>
+						</div>
+					)}
 				</div>
 			</div>
 			{loading && <Loader loading={loading} message={message} />}
