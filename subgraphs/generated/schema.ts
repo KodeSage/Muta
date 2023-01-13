@@ -51,21 +51,13 @@ export class VideoEvent extends Entity {
     this.set("videocontentId", Value.fromBytes(value));
   }
 
-  get ipfsURI(): string | null {
+  get ipfsURI(): string {
     let value = this.get("ipfsURI");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+    return value!.toString();
   }
 
-  set ipfsURI(value: string | null) {
-    if (!value) {
-      this.unset("ipfsURI");
-    } else {
-      this.set("ipfsURI", Value.fromString(<string>value));
-    }
+  set ipfsURI(value: string) {
+    this.set("ipfsURI", Value.fromString(value));
   }
 
   get videoeventOwner(): Bytes {

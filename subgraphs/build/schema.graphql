@@ -3,7 +3,7 @@
 type VideoEvent @entity {
 	id: ID!
 	videocontentId: Bytes!
-	ipfsURI: VideoEventMetadata
+	ipfsURI: VideoEventMetadata!
 	videoeventOwner: Bytes!
 	maxWatchCapacity: BigInt!
 	totalJoinedWatchParties: BigInt!

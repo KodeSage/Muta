@@ -27,11 +27,12 @@ export function handleNewVideoCreated(event: NewVideoCreatedEvent): void {
 		newvideoEvent.videoeventOwner = event.params.creatorAddress;
 		newvideoEvent.maxWatchCapacity = event.params.maxWatchCapacity;
 		newvideoEvent.totalJoinedWatchParties = integer.ZERO;
-		const videoIpfsHash = event.params.videocontentDataCID + "/data.json";
+		const videoIpfsHash =
+			event.params.videocontentDataCID.toString() + "/data.json";
 		newvideoEvent.ipfsURI = videoIpfsHash;
 		VideoEventMetadataTemplate.create(videoIpfsHash);
-		newvideoEvent.save();
 	}
+	newvideoEvent.save();
 }
 
 function fetchOrCreateAccount(address: Address): Account {
